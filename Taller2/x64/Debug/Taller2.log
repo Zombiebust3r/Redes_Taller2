@@ -1,4 +1,2 @@
-﻿  main.cpp
-d:\documentos\github\redes_taller2\taller2\main.cpp(96): warning C4244: 'argumento': conversión de 'float' a 'sf::Int32'; posible pérdida de datos
-  Taller2.vcxproj -> D:\Documentos\GitHub\Redes_Taller2\x64\Debug\Taller2.exe
+﻿  Taller2.vcxproj -> D:\Documentos\GitHub\Redes_Taller2\x64\Debug\Taller2.exe
   Taller2.vcxproj -> D:\Documentos\GitHub\Redes_Taller2\x64\Debug\Taller2.pdb (Partial PDB)
