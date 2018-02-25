@@ -46,6 +46,8 @@ void ControlServidor()
 			}
 			else {	//Receive:
 				// The listener socket is not ready, test all other sockets (the clients)
+				//lista de iteradores que iteran listas de tcp sockets
+				std::list<std::list<sf::TcpSocket*>::iterator> itTemp; //si se desconecta un socket, lo guardamos en este it para borrarlo después
 				for (std::list<sf::TcpSocket*>::iterator it = clients.begin(); it != clients.end(); ++it) {
 					sf::TcpSocket& client = **it;
 					if (selector.isReady(client)) {
@@ -65,7 +67,9 @@ void ControlServidor()
 							}
 						}
 						else if (status == sf::Socket::Disconnected) {
+							std::cout << clients.size() << std::endl;
 							selector.remove(client);
+							itTemp.push_back(it); //guardamos iterador del socket desconectado
 							std::cout << "Elimino el socket que se ha desconectado\n";
 						}
 						else {
@@ -73,6 +77,11 @@ void ControlServidor()
 						}
 					}
 				}
+				//iterador que itera la lista de iteradores que iteran la lista de sockets
+				for (std::list<std::list<sf::TcpSocket*>::iterator>::iterator it = itTemp.begin(); it != itTemp.end(); ++it) {
+					clients.erase(*it); 
+				}
+				//std::list<std::list<sf::TcpSocket*>::iterator>::swap(itTemp);
 			}
 		}
 	}
@@ -80,46 +89,14 @@ void ControlServidor()
 
 void main()
 {
-	std::cout << "Seras servidor (s) o cliente (c)? ... ";
+	std::cout << "Seras servidor (s)? ... ";
 	char c;
 	std::cin >> c;
 
-	if (c == 's')
-	{
+	if (c == 's') {
 		ControlServidor();
 	}
-	/*else if (c == 'c')
-	{
-		sf::TcpSocket socket;
-		sf::Socket::Status status = socket.connect("localhost", 50000, sf::milliseconds(15.f));
-		if (status != sf::Socket::Done)
-		{
-			std::cout << "Error al establecer conexion\n";
-			exit(0);
-		}
-		else
-		{
-			std::cout << "Se ha establecido conexion\n";
-		}
-		std::string str = "hola";
-		do
-		{
-			std::cout << "Escribe ... ";
-			std::getline(std::cin, str);
-			sf::Packet packet;
-			packet << str;
-			status = socket.send(packet);
-			if (status != sf::Socket::Done)
-			{
-				std::cout << "Error al enviar\n";
-			}
-			std::cout << std::endl;
-		} while (str != "exit");
-		socket.disconnect();
-
-	}*/
-	else
-	{
+	else {
 		exit(0);
 	}
 

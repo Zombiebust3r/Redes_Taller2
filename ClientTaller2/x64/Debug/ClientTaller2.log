@@ -1,5 +1,5 @@
 ﻿  main.cpp
-d:\documentos\github\redes_taller2\clienttaller2\main.cpp(137): warning C4244: 'argumento': conversión de '::size_t' a 'float'; posible pérdida de datos
-d:\documentos\github\redes_taller2\clienttaller2\main.cpp(154): warning C4244: 'argumento': conversión de 'time_t' a 'unsigned int'; posible pérdida de datos
-  ClientTaller2.vcxproj -> D:\Documentos\GitHub\Redes_Taller2\x64\Debug\ClientTaller2.exe
-  ClientTaller2.vcxproj -> D:\Documentos\GitHub\Redes_Taller2\x64\Debug\ClientTaller2.pdb (Partial PDB)
+e:\yosm\documents\uni\3r\3r2sem\redes\redes_taller2\clienttaller2\main.cpp(137): warning C4244: 'argumento': conversión de '::size_t' a 'float'; posible pérdida de datos
+e:\yosm\documents\uni\3r\3r2sem\redes\redes_taller2\clienttaller2\main.cpp(154): warning C4244: 'argumento': conversión de 'time_t' a 'unsigned int'; posible pérdida de datos
+  ClientTaller2.vcxproj -> E:\Yosm\Documents\uni\3r\3r2sem\redes\Redes_Taller2\x64\Debug\ClientTaller2.exe
+  ClientTaller2.vcxproj -> E:\Yosm\Documents\uni\3r\3r2sem\redes\Redes_Taller2\x64\Debug\ClientTaller2.pdb (Partial PDB)
