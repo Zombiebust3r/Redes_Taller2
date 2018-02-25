@@ -30,12 +30,23 @@ void ControlServidor()
 				sf::TcpSocket* client = new sf::TcpSocket;
 				if (listener.accept(*client) == sf::Socket::Done)
 				{
+					//avisamos a todos que se ha conectado un nuevo cliente
+					for (std::list<sf::TcpSocket*>::iterator it = clients.begin(); it != clients.end(); ++it) {
+						sf::TcpSocket& tempSok = **it;
+						std::string newClient = "Se ha conectado un nuevo cliente";
+						tempSok.send(newClient.c_str(), newClient.length() + 1);
+					}
+
 					// Add the new client to the clients list
 					std::cout << "Llega el cliente con puerto: " << client->getRemotePort() << std::endl;
 					clients.push_back(client);
 					// Add the new client to the selector so that we will
 					// be notified when he sends something
 					selector.add(*client);
+					
+					std::string newClient = "Te has conectado al chat";
+					client->send(newClient.c_str(), newClient.length() + 1);
+
 				}
 				else
 				{
