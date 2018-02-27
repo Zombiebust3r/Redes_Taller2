@@ -37,16 +37,29 @@ void receiveFunction(sf::TcpSocket* socket, bool* _connected) {
 	char receiveBuffer[2000];
 	std::size_t _received;
 	while (*_connected) {
-		sf::Socket::Status rSt = socket->receive(receiveBuffer, sizeof(receiveBuffer), _received);
+		sf::Packet packet;
+		sf::Socket::Status rSt = socket->receive(packet);
+		sf::Packet packet2 = packet;
 		if (rSt == sf::Socket::Status::Done/*_received > 0*/) {
-			addMessage(receiveBuffer);
-			if (strcmp(receiveBuffer, " >exit") == 0) {
-				std::cout << "EXIT" << std::endl;
-				//*_connected = false;
-				//std::string exitMessage = " >exit";
-				//socket->send(exitMessage.c_str(), exitMessage.length() + 1);
-				addMessage("OTHER USER DISONNECTED FROM CHAT");
+			std::string str;
+			std::string str2;
+			if (packet >> str >> str2) {
+				std::cout << "entreaqui";
+				addMessage(str + str2);
+
+				if (strcmp(str2.c_str(), " >exit") == 0) {
+					std::cout << "EXIT" << std::endl;
+					//*_connected = false;
+					//std::string exitMessage = " >exit";
+					//socket->send(exitMessage.c_str(), exitMessage.length() + 1);
+					addMessage("OTHER USER DISONNECTED FROM CHAT");
+				}
 			}
+			else {
+				packet2 >> str;
+				addMessage(str);
+			}
+			
 		}
 	}
 }
@@ -93,6 +106,7 @@ void blockeComunication() {
 			while (window.pollEvent(evento))
 			{
 				std::string exitMessage;
+				sf::Packet packet;
 				switch (evento.type)
 				{
 				case sf::Event::Closed:
@@ -101,7 +115,8 @@ void blockeComunication() {
 					std::cout << "CLOSE" << std::endl;
 					connected = false;
 					exitMessage = " >exit";
-					socket.send(exitMessage.c_str(), exitMessage.length() + 1);
+					packet << exitMessage;
+					socket.send(packet);
 					window.close();
 					break;
 				case sf::Event::KeyPressed:
@@ -109,7 +124,9 @@ void blockeComunication() {
 						window.close();
 					else if (evento.key.code == sf::Keyboard::Return) //envia mensaje
 					{
-						sf::Socket::Status tempSt = socket.send((" >" + mensaje).c_str(), (" >" + mensaje).length() + 1);
+						sf::Packet packet;
+						packet << (" >" + mensaje).c_str();
+						sf::Socket::Status tempSt = socket.send(packet);
 						//addMessage(mensaje);
 						if (strcmp(mensaje.c_str(), "exit") == 0) {
 							std::cout << "EXIT" << std::endl;

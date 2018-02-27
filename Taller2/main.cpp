@@ -34,7 +34,9 @@ void ControlServidor()
 					for (std::list<sf::TcpSocket*>::iterator it = clients.begin(); it != clients.end(); ++it) {
 						sf::TcpSocket& tempSok = **it;
 						std::string newClient = "Se ha conectado un nuevo cliente";
-						tempSok.send(newClient.c_str(), newClient.length() + 1);
+						sf::Packet packet;
+						packet << newClient;
+						tempSok.send(packet);
 					}
 
 					// Add the new client to the clients list
@@ -44,8 +46,9 @@ void ControlServidor()
 					// be notified when he sends something
 					selector.add(*client);
 					
-					std::string newClient = "Te has conectado al chat";
-					client->send(newClient.c_str(), newClient.length() + 1);
+					std::string newClient = "Te has conectado al chat"; sf::Packet packet;
+					packet << newClient;
+					client->send(packet);
 
 				}
 				else
@@ -62,19 +65,19 @@ void ControlServidor()
 				for (std::list<sf::TcpSocket*>::iterator it = clients.begin(); it != clients.end(); ++it) {
 					sf::TcpSocket& client = **it;
 					if (selector.isReady(client)) {
-						char receiveBuffer[2000];
-						std::size_t _received;
+						std::string strRec;
 						// The client has sent some data, we can receive it
 						sf::Packet packet;
-						status = client.receive(receiveBuffer, sizeof(receiveBuffer), _received);
+						status = client.receive(packet);
+						packet >> strRec;
 						if (status == sf::Socket::Done)	{
-							std::string strRec;
-							strRec = receiveBuffer;
 							std::cout << "He recibido " << strRec << " del puerto " << client.getRemotePort() << std::endl;
 							//Reenviar mensaje a todos los clientes:
 							for (std::list<sf::TcpSocket*>::iterator it2 = clients.begin(); it2 != clients.end(); ++it2) {
 								sf::TcpSocket& tempSok = **it2;
-								sf::Socket::Status tempSt = tempSok.send(strRec.c_str(), strRec.length() + 1);
+								sf::Packet packet;
+								packet << "Testerino: " << strRec;
+								tempSok.send(packet);
 							}
 						}
 						else if (status == sf::Socket::Disconnected) {
